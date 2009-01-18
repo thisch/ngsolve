@@ -1,6 +1,8 @@
 geometry = square.in2d
 mesh = square.vol
 
+shared = demo_instat
+
 
 define coefficient lam
 1,

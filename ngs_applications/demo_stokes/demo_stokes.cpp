@@ -22,7 +22,7 @@ class FESpaceStokes : public CompoundFESpace
 {
 public:
   FESpaceStokes (const MeshAccess & ama, 		   
-		 const ARRAY<const FESpace*> & aspaces, 
+		 const Array<const FESpace*> & aspaces, 
 		 const Flags & flags)
     : CompoundFESpace (ama, aspaces, flags)
   { ; }
@@ -34,7 +34,7 @@ public:
     cout << "Create Taylor-Hood FE Space" << endl;
 
     // space has 3 components
-    ARRAY<const FESpace*> spaces(3);
+    Array<const FESpace*> spaces(3);
 
     int order = int (flags.GetNumFlag ("order", 2));
     // if (order < 2)
@@ -189,7 +189,7 @@ public:
   (StokesDMat (coeff))
   { ; }
   
-  static Integrator * Create (ARRAY<CoefficientFunction*> & coeffs)
+  static Integrator * Create (Array<CoefficientFunction*> & coeffs)
   {
     return new StokesIntegrator (coeffs[0]);
   }
@@ -251,7 +251,7 @@ public:
   (DiagDMat<2> (new ConstantCoefficientFunction(1)))
   { ; }
   
-  static Integrator * Create (ARRAY<CoefficientFunction*> & coeffs)
+  static Integrator * Create (Array<CoefficientFunction*> & coeffs)
   {
     return new StokesUIntegrator ();
   }

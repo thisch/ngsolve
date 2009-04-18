@@ -104,10 +104,10 @@ public:
       dynamic_cast<const CompoundFiniteElement&> (bfel);
 
     // a scalar H1 element
-    const NodalFiniteElement<2> & fel_u = 
-      dynamic_cast<const NodalFiniteElement<2>&> (cfel[0]);
-    const NodalFiniteElement<2> & fel_p = 
-      dynamic_cast<const NodalFiniteElement<2>&> (cfel[2]);
+    const ScalarFiniteElement<2> & fel_u = 
+      dynamic_cast<const ScalarFiniteElement<2>&> (cfel[0]);
+    const ScalarFiniteElement<2> & fel_p = 
+      dynamic_cast<const ScalarFiniteElement<2>&> (cfel[2]);
     
     int nd_u = fel_u.GetNDof();
     int nd_p = fel_p.GetNDof();
@@ -223,8 +223,8 @@ public:
   {
     const CompoundFiniteElement & cfel = 
       dynamic_cast<const CompoundFiniteElement&> (bfel);
-    const NodalFiniteElement<2> & fel_u = 
-      dynamic_cast<const NodalFiniteElement<2>&> (cfel[0]);
+    const ScalarFiniteElement<2> & fel_u = 
+      dynamic_cast<const ScalarFiniteElement<2>&> (cfel[0]);
     
     int nd_u = fel_u.GetNDof();
 

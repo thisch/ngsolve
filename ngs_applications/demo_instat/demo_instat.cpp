@@ -4,7 +4,7 @@ Solver for a parabolic pde
 
 Solves
 
-M du/dt  +  A u = 0
+M du/dt  +  A u = f
 
 by an implicite Euler method
 

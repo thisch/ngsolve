@@ -99,6 +99,8 @@ public:
 
     summat.AsVector() = (1.0/dt) * matm.AsVector() + mata.AsVector();
 
+    dynamic_cast<BaseSparseMatrix&> (summat).SetInverseType ("sparsecholesky");
+
     // A sparse matrix can compute a sparse factorization. One has to cast to a sparse matrix:
     BaseMatrix & invmat = * dynamic_cast<BaseSparseMatrix&> (summat) . InverseMatrix();
 

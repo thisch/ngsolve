@@ -1,2 +1,3 @@
-dist_noinst_DATA = NGSolve.sln NGSolve.vcproj 
+dist_noinst_DATA = NGSolve.sln NGSolve.vcproj postBuild_ngsolve.bat
+
 

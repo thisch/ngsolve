@@ -1,9 +1,4 @@
 #ifdef LAPACK
-#include <iostream>
-#include <complex>
- 
-using namespace std;
-
 
 #include "bla.hpp"
 #include "LapackInterface.hpp" 

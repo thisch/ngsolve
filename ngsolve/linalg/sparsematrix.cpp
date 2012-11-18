@@ -113,7 +113,7 @@ namespace ngla
 	}
       }
     
-    Table<int> & dof2element = *(creator.GetTable());
+    Table<int> & dof2element = *creator.GetTable();
   
     Array<int> cnt(ndof);
     cnt = 0;
@@ -274,6 +274,7 @@ namespace ngla
       QuickSort (GetRowIndices(i));
 
     colnr[nze] = 0;
+    delete creator.GetTable();
   }
 
   

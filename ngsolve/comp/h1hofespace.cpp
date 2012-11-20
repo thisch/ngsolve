@@ -307,6 +307,10 @@ namespace ngcomp
     if(dim == 3) 
       for(int i=0;i<nfa;i++) if(!used_face[i]) order_face[i] = INT<2> (1,1); 
 
+    for (int i = 0; i < ne; i++)
+      if (!DefinedOn (ma.GetElIndex (i)))
+	order_inner[i] = INT<3>(1,1,1);
+
     if(print) 
       {
 	*testout << " H1HoFESpace order " << order << " , var_order " << var_order << " , relorder " << rel_order << endl;  

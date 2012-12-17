@@ -21,8 +21,10 @@ demo_comp_SOURCES = demo_comp.cpp
 demo_comp_LDADD = \
 	$(top_builddir)/comp/libngcomp.la \
 	$(top_builddir)/solve/libngsolve.la \
+	$(top_builddir)/multigrid/libngmg.la \
 	$(top_builddir)/linalg/libngla.la \
 	$(top_builddir)/fem/libngfem.la  \
+	$(top_builddir)/basiclinalg/libngbla.la  \
 	$(top_builddir)/ngstd/libngstd.la  \
 	$(top_builddir)/parallel/libparallel.la \
 	$(LAPACK_LIBS) \
@@ -34,7 +36,9 @@ demo_comp1d_SOURCES = demo_comp1d.cpp netgen_dummy.cpp
 demo_comp1d_LDADD = \
 	$(top_builddir)/comp/libngcomp.la \
 	$(top_builddir)/solve/libngsolve.la \
+	$(top_builddir)/multigrid/libngmg.la \
 	$(top_builddir)/fem/libngfem.la \
+	$(top_builddir)/basiclinalg/libngbla.la  \
 	$(top_builddir)/linalg/libngla.la \
 	$(top_builddir)/ngstd/libngstd.la \
 	$(top_builddir)/parallel/libparallel.la \
@@ -45,9 +49,11 @@ demo_solve_SOURCES = demo_solve.cpp
 demo_solve_LDADD = \
 	$(top_builddir)/solve/libngsolve.la \
 	$(top_builddir)/comp/libngcomp.la \
+	$(top_builddir)/multigrid/libngmg.la \
 	$(top_builddir)/fem/libngfem.la \
 	$(top_builddir)/parallel/libparallel.la \
 	$(top_builddir)/linalg/libngla.la \
+	$(top_builddir)/basiclinalg/libngbla.la  \
 	$(top_builddir)/ngstd/libngstd.la \
 	$(LAPACK_LIBS) \
         -L$(libdir) -lnglib -linterface 

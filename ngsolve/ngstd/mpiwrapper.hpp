@@ -256,7 +256,7 @@ namespace ngstd
     static Timer t("dummy - waitall");
     RegionTimer r(t);
     if (!requests.Size()) return;
-    MPI_Waitall (requests.Size(), &requests[0], MPI_STATUS_IGNORE);
+    MPI_Waitall (requests.Size(), &requests[0], MPI_STATUSES_IGNORE);
   }
   
   inline int MyMPI_WaitAny (const Array<MPI_Request> & requests)

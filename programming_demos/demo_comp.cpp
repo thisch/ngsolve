@@ -14,10 +14,11 @@ int main (int argc, char **argv)
   MyMPI mympi(argc, argv);
 
   Ng_LoadGeometry ("cube.geo");
-  Ng_LoadMesh ("cube.vol");
+
+  MeshAccess ma;
+  ma.LoadMesh ("cube.vol");
   
   LocalHeap lh(10000000, "main heap");
-  MeshAccess ma;
 
   H1HighOrderFESpace fes(ma, Flags("order=2"));
   
@@ -27,7 +28,6 @@ int main (int argc, char **argv)
 
   bfa.AddIntegrator (new LaplaceIntegrator<3> (new ConstantCoefficientFunction(1)));
   bfa.AddIntegrator (new RobinIntegrator<3> (new ConstantCoefficientFunction(1)));
-
 
   T_LinearForm<double> lff(fes, "lff", Flags());
 

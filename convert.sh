@@ -82,6 +82,8 @@ s#\tbranches/my_little_ngsolve-${bv}/#\tmy_little_ngsolve/#' \${TMPFILE} | sort 
      rm \${TMPFILE}" --msg-filter 'sed -e "/^git-svn-id:/d"' --prune-empty -d ${GIT_FILTERBRANCH_DIR} -f ${bn}
 done
 
+git gc
+
 git push github +master:master
 for bv in ${branchversions}; do
     bn=v${bv}

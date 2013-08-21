@@ -8,8 +8,9 @@ is updated every 24 hours. The original repository can be found at
 svn://svn.code.sf.net/p/ngsolve/code
 </pre>
 
-The trunk of the repository can be found in the master branch. All old
-branches 4.9,5.0,... are in respective git branches v4.9,v5.0,... .
+The trunk of the svn repository is mirrored to the master branch. All
+old branches 4.9,5.0,... are mirrored to the respective git branches
+v4.9,v5.0,... .
 
 Since the git repository is created from the original subversion
 repository using git filter-branch, fast-forwarding of the individual
@@ -24,7 +25,7 @@ subversion repository is located together with this README file in the
 mirrorinfo branch.
 
 Since this repository is only a mirror, pull requests will _not_ be
-accepted/looked at.  For submitting bug reports/patches, see the 
-[original website](http://sourceforge.net/projects/ngsolve)
-or contact Joachim Schöberl directly.
+looked at.  For submitting bug reports/patches, see the [original
+website](http://sourceforge.net/projects/ngsolve) or contact Joachim
+Schöberl directly.
 

@@ -1,0 +1,6 @@
+joachim = Joachim Schöberl <joachim.schoeberl@tuwien.ac.at>
+joachimschoberl = Joachim Schöberl <joachim.schoeberl@tuwien.ac.at>
+gkitzler = Gerhard Kitzler <gerhard.kitzler@tuwien.ac.at>
+philippose = Philippose Rajan <philippose.rajan@gmail.com>
+schruste = Christoph Lehrenfeld <lehrenfeld@igpm.rwth-aachen.de>
+nannen = Lothar Nannen <lothar.nannen@tuwien.ac.at>

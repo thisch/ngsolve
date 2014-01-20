@@ -18,4 +18,4 @@ clean:
 
 
 dist:
-	cd ..; tar -czf MyLittleNGSolve-4.9.14.tar.gz my_little_ngsolve/Makefile my_little_ngsolve/*.cpp my_little_ngsolve/*.hpp my_little_ngsolve/*.pde my_little_ngsolve/*.vol my_little_ngsolve/*.in2d my_little_ngsolve/windows/my_little_ngsolve*
+	cd ..; tar -czf MyLittleNGSolve-5.2.tar.gz my_little_ngsolve-5.2/Makefile my_little_ngsolve-5.2/*.cpp my_little_ngsolve-5.2/*.hpp my_little_ngsolve-5.2/*.pde my_little_ngsolve-5.2/*.vol my_little_ngsolve-5.2/*.in2d my_little_ngsolve-5.2/windows/my_little_ngsolve*

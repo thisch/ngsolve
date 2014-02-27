@@ -21,9 +21,16 @@ GIT_FILTERBRANCH_DIR=$(mktemp -d ${TMPTEMPLATE})
 SED_CLEAN_SCRIPT=$(mktemp ${TMPTEMPLATE})
 cat > "${SED_CLEAN_SCRIPT}" << EOF
 /\tbranches/d
-/\t.*\.vol$/d
-/\t.*\.vol.gz$/d
-/\t.*quickstart.pdf$/d
+/\tngsolve\/configure/d
+/\tngsolve\/m4\/libtool.m4/d
+/\tngsolve\/m4\/ltversion.m4/d
+/\tngsolve\/ltmain.sh/d
+/\tngsolve\/aclocal.m4/d
+/\tngsolve\/config.guess/d
+/\tngsolve\/config.h.in/d
+/\tngsolve\/config.sub/d
+# Extremely large mesh cube.vol
+/1c54580bc452a34fe6364eb38e389832236ca63a/d
 EOF
 
 
@@ -42,7 +49,7 @@ git svn rebase
 
 branchversions=$(ls -d branches/ngsolve-* | sed -e 's#branches/ngsolve-##')
 
-for i in $(git branch --list master v* | cut -c3-); do  
+for i in $(git branch --list master v* | cut -c3-); do
     git branch -D $i;
 done
 
@@ -72,7 +79,7 @@ s#\tbranches/ngsolve-${bv}/#\tngsolve/#' \${TMPFILE} | sort -k 3 > \${TMPFILE}.b
 s#\tbranches/my_little_ngsolve-${bv}/#\tmy_little_ngsolve/#' \${TMPFILE} | sort -k 3 > \${TMPFILE}.bak
           mv \${TMPFILE}.bak \${TMPFILE}
      fi
-     
+
 
      sed -f ${SED_CLEAN_SCRIPT} \${TMPFILE} > \${TMPFILE}.bak
      mv \${TMPFILE}.bak \${TMPFILE}
@@ -114,10 +121,13 @@ v4.9,v5.0,... .
 Since the git repository is created from the original subversion
 repository using git filter-branch, fast-forwarding of the individual
 branches might not work all the time. In comparison to the svn repo
-mesh files (*.vol and *.vol.gz) and the quickstart.pdf file have been
+one extremely large mesh file (cube.vol, ~200MB!) and several
+mistakenly committed auto-generated autotools scripts have been
 removed in order to reduce the size of the repository. The files can
 be reproduced from the source files which are still included in the
-repository.
+repository. Note, that for a final conversion one should remove all
+mesh files from the repository and instead generate them directly from
+the geometry input files in the build process.
 
 The shell script convert.sh and the authors file for converting the
 subversion repository is located together with this README file in the

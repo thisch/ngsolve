@@ -15,10 +15,13 @@ v4.9,v5.0,... .
 Since the git repository is created from the original subversion
 repository using git filter-branch, fast-forwarding of the individual
 branches might not work all the time. In comparison to the svn repo
-mesh files (*.vol and *.vol.gz) and the quickstart.pdf file have been
+one extremely large mesh file (cube.vol, ~200MB!) and several
+mistakenly committed auto-generated autotools scripts have been
 removed in order to reduce the size of the repository. The files can
 be reproduced from the source files which are still included in the
-repository.
+repository. Note, that for a final conversion one should remove all
+mesh files from the repository and instead generate them directly from
+the geometry input files in the build process.
 
 The shell script convert.sh and the authors file for converting the
 subversion repository is located together with this README file in the

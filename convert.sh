@@ -21,14 +21,18 @@ GIT_FILTERBRANCH_DIR=$(mktemp -d ${TMPTEMPLATE})
 SED_CLEAN_SCRIPT=$(mktemp ${TMPTEMPLATE})
 cat > "${SED_CLEAN_SCRIPT}" << EOF
 /\tbranches/d
-/\tngsolve\/configure/d
-/\tngsolve\/m4\/libtool.m4/d
-/\tngsolve\/m4\/ltversion.m4/d
-/\tngsolve\/ltmain.sh/d
-/\tngsolve\/aclocal.m4/d
-/\tngsolve\/config.guess/d
-/\tngsolve\/config.h.in/d
-/\tngsolve\/config.sub/d
+/\tngsolve\/configure$/d
+/\tngsolve\/m4\/libtool\.m4$/d
+/\tngsolve\/m4\/ltversion\.m4$/d
+/\tngsolve\/m4\/ltoptions\.m4$/d
+/\tngsolve\/m4\/lt~obsolete\.m4$/d
+/\tngsolve\/m4\/ltsugar\.m4$/d
+/\tngsolve\/ltmain\.sh$/d
+/\tngsolve\/aclocal\.m4$/d
+/\tngsolve\/config\.guess$/d
+/\tngsolve\/config\.h\.in$/d
+/\tngsolve\/config\.sub$/d
+/Makefile\.in$/d
 # Extremely large mesh cube.vol
 /1c54580bc452a34fe6364eb38e389832236ca63a/d
 EOF

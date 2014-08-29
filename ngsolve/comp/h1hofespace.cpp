@@ -493,6 +493,12 @@ namespace ngcomp
   }
 
 
+  void H1HighOrderFESpace :: PrintReport (ostream & ost)
+  {
+    FESpace::PrintReport (ost);
+  }
+
+
   void H1HighOrderFESpace :: DoArchive (Archive & archive)
   {
     low_order_space -> DoArchive (archive);

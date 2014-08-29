@@ -329,7 +329,7 @@ namespace ngcomp
     }
 
     /// prints report to file
-    virtual void PrintReport (ostream & ost) const;
+    virtual void PrintReport (ostream & ost);
 
     ///
     virtual void MemoryUsage (Array<MemoryUsageStruct*> & mu) const;

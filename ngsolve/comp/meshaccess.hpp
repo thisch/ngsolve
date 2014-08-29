@@ -52,12 +52,6 @@ namespace ngcomp
     bool operator!=(ElementId id2) const { return nr != id2.nr || vb != id2.vb; }
   };
 
-  inline ostream & operator<< (ostream & ost, ElementId id)
-  {
-    return ost << (id.IsVolume() ? "VEl" : "BEl") << ' ' << id.Nr();
-  }
-
-
   class ElementIterator
   {
     VorB vb;
@@ -69,16 +63,14 @@ namespace ngcomp
     bool operator!=(ElementIterator id2) const { return nr != id2.nr || vb != id2.vb; }
   };
   
-  class ElementRange : public IntRange
+  class ElementRange
   {
     VorB vb;
-    // IntRange r;
+    IntRange r;
   public:
-    ElementRange (VorB avb, IntRange ar) : IntRange(ar), vb(avb) { ; }
-    ElementId First() const { return ElementId(vb, IntRange::First()); }
-    ElementIterator begin () const { return ElementIterator(vb,First()); }
-    ElementIterator end () const { return ElementIterator(vb,Next()); }
-    ElementId operator[] (int nr) { return ElementId(vb, First()+nr); }
+    ElementRange (VorB avb, IntRange ar) : vb(avb), r(ar) { ; }
+    ElementIterator begin () const { return ElementIterator(vb,r.First()); }
+    ElementIterator end () const { return ElementIterator(vb,r.Next()); }
   };
 
   template <VorB VB>
@@ -189,12 +181,6 @@ namespace ngcomp
   public:
     /// connects to Netgen - mesh
     MeshAccess (netgen::Mesh * amesh = NULL);
-    /// loads mesh from file
-    MeshAccess (string filename)
-      : MeshAccess() 
-    {
-      LoadMesh (filename);
-    }
     /// not much to do 
     virtual ~MeshAccess ();
 

@@ -23,6 +23,9 @@
 using namespace std;
 using namespace ngsolve;
 
+namespace netgen {
+    extern string ngdir;
+}
 
 #include <nginterface.h>
 #include <ngexception.hpp>
@@ -38,10 +41,10 @@ namespace netgen
 
 
 #ifdef NGS_PYTHON
-// #include <dlfcn.h>  // dlopen of python lib ???
 #include "../ngstd/python_ngstd.hpp"
 
-void * ptr = (void*)PyOS_InputHook;
+
+
 
 
 class AcquireGIL 
@@ -60,7 +63,6 @@ class AcquireGIL
 
 
 class PythonEnvironment : public BasePythonEnvironment {
-    bool is_init;
     public:
     static PythonEnvironment py_env;
 
@@ -81,24 +83,20 @@ class PythonEnvironment : public BasePythonEnvironment {
     void Spawn(string initfile) {
         if(pythread_id != mainthread_id) {
             cout << "Python thread already running!" << endl;
-        }
-        else {
+        } else {
+            PyEval_ReleaseLock();
             std::thread([](string init_file_) {
-                AcquireGIL gil_lock;
-            try{
-                py_env.pythread_id = std::this_thread::get_id();
-                py_env.exec_file(init_file_.c_str());
-                // py_env.exec("from runpy import run_module");
-                // py_env.exec("globals().update(run_module('init',globals()))");
-            }
-            catch (bp::error_already_set const &) {
-                PyErr_Print();
-            }
-            cout << "Python shell finished." << endl;
-
-            py_env.pythread_id = py_env.mainthread_id;
-        
-              }, initfile).detach();
+                    try{
+                    AcquireGIL gil_lock;
+                    py_env.pythread_id = std::this_thread::get_id();
+                    py_env.exec_file(init_file_.c_str());
+                    }
+                    catch(bp::error_already_set const &) {
+                    PyErr_Print();
+                    }
+                    cout << "Python shell finished." << endl;
+                    py_env.pythread_id = py_env.mainthread_id;
+                    }, initfile).detach();
         }
     }
 
@@ -106,72 +104,52 @@ class PythonEnvironment : public BasePythonEnvironment {
     virtual ~PythonEnvironment() { }
 };
 
-void ExportNgstd();
-void ExportNgbla();
-void ExportNgfem();
-void ExportNgla();
-void ExportNgcomp();
-void ExportNgsolve();
+
 
 PythonEnvironment::PythonEnvironment() {
-
-
     mainthread_id = std::this_thread::get_id();
     pythread_id = std::this_thread::get_id();
     cout << "Init Python environment." << endl;
     Py_Initialize();
     PyEval_InitThreads();
+
     try{
         main_module = bp::import("__main__");
         main_namespace = main_module.attr("__dict__");
+
         exec("from sys import path");
-        //         exec("from runpy import run_module");
+        exec("from runpy import run_module");
         exec("from os import environ");
 
         exec("path.append(environ['NETGENDIR'])");
-        exec("path.append('.')");
-
-
-        ExportNgstd();
-        ExportNgbla();
-        ExportNgfem();
-        ExportNgla();
-        ExportNgcomp();
-        ExportNgsolve();
-
-        cout << "ngs-python objects are available in ngstd, ngbla, ...\n"
-             << "to import the whole bunch of objets enter\n\n"
-             << "from ngstd import *\n"
-             << "from ngbla import *\n"
-             << "from ngfem import *\n"
-             << "from ngla import *\n"
-             << "from ngcomp import *\n"
-             << "from ngsolve import *\n"
-             << "dir()\n"
-             << endl << endl;
-
-        PyEval_ReleaseLock();
+        exec("globals().update(run_module('expr',globals()))");
     }
     catch(bp::error_already_set const &) {
         PyErr_Print();
     }
+
 }
 
 
 PythonEnvironment PythonEnvironment::py_env;
 
 
-         
 
 
+struct PyExportNgStd {
+  PyExportNgStd(BasePythonEnvironment & py_env);
+};
 
+struct PyExportNgBla {
+  PyExportNgBla(BasePythonEnvironment & py_env);
+};
 
-/*
 struct PyExportNgComp {
   PyExportNgComp(BasePythonEnvironment & py_env);
 };
-void PyExportNgSolve(BasePythonEnvironment & py_env);
-*/         
+         
+
+
 #endif
 
 
@@ -467,11 +445,8 @@ int NGS_LoadPDE (ClientData clientData,
 
 #ifdef NGS_PYTHON
           cout << "set python mesh" << endl;
-          // PythonEnvironment::getInstance()["mesh"] = bp::ptr(&pde->GetMeshAccess(0));
-          {
-            // AcquireGIL gil_lock;
-            PythonEnvironment::getInstance()["pde"] = bp::ptr(&*pde);
-          }
+          PythonEnvironment::getInstance()["mesh"] = bp::ptr(&pde->GetMeshAccess(0));
+          PythonEnvironment::getInstance()["pde"] = bp::ptr(&*pde);
 #endif
 
           int port = pde -> GetConstant ("port", true);
@@ -900,7 +875,7 @@ int NGS_GetData (ClientData clientData,
       else if (strcmp (argv[1], "coefficientname") == 0)
 	{
 	  sprintf (buf, "%s",
-		   pde->GetCoefficientTable().GetName(atoi(argv[2])).c_str());
+		   pde->GetCoefficientTable().GetName(atoi(argv[2])));
 	}
 
 
@@ -912,7 +887,7 @@ int NGS_GetData (ClientData clientData,
       else if (strcmp (argv[1], "spacename") == 0)
 	{
 	  sprintf (buf, "%s",
-		   pde->GetSpaceTable().GetName(atoi(argv[2])).c_str());
+		   pde->GetSpaceTable().GetName(atoi(argv[2])));
 	}
       else if (strcmp (argv[1], "spacetype") == 0)
 	{
@@ -952,7 +927,7 @@ int NGS_GetData (ClientData clientData,
       else if (strcmp (argv[1], "gridfunctionname") == 0)
 	{
 	  sprintf (buf, "%s",
-		   pde->GetGridFunctionTable().GetName(atoi(argv[2])).c_str());
+		   pde->GetGridFunctionTable().GetName(atoi(argv[2])));
 	}
       else if (strcmp (argv[1], "gridfunctionspace") == 0)
 	{
@@ -971,7 +946,7 @@ int NGS_GetData (ClientData clientData,
       else if (strcmp (argv[1], "bilinearformname") == 0)
 	{
 	  sprintf (buf, "%s",
-		   pde->GetBilinearFormTable().GetName(atoi(argv[2])).c_str());
+		   pde->GetBilinearFormTable().GetName(atoi(argv[2])));
 	}
 
       else if (strcmp (argv[1], "numlinearforms") == 0)
@@ -981,7 +956,7 @@ int NGS_GetData (ClientData clientData,
       else if (strcmp (argv[1], "linearformname") == 0)
 	{
 	  sprintf (buf, "%s",
-		   pde->GetLinearFormTable().GetName(atoi(argv[2])).c_str());
+		   pde->GetLinearFormTable().GetName(atoi(argv[2])));
 	}
 
       else if (strcmp (argv[1], "numbilinearformcomps") == 0)
@@ -1172,24 +1147,23 @@ int NGSolve_Init (Tcl_Interp * interp)
 #endif
 
 
-  
+
 
 #ifdef NGS_PYTHON
+  PyExportNgStd init_pystd(PythonEnvironment::getInstance());
+  PyExportNgBla init_pybla(PythonEnvironment::getInstance());
+  PyExportNgComp init_pycomp(PythonEnvironment::getInstance());
 
-  // void * handle = dlopen ("libpython3.2mu.so", RTLD_LAZY | RTLD_GLOBAL);
+  
+  PyExportSymbolTable< FESpace* > ();
+  PyExportSymbolTableStdTypes< double > ();
+  PyExportSymbolTableStdTypes< double* > ();
 
-  string initfile = netgen::ngdir + dirslash + "init.py";
-  cout << "python init file = " << initfile << endl;
-  auto py_env = PythonEnvironment::getInstance();
-
-  {
-    bp::scope sc(py_env.main_module);
-    bp::def ("SetDefaultPDE", 
-             FunctionPointer([](PDE & apde) {  pde.Reset (&apde, false); return; }));
-  }
-
-  py_env.Spawn(initfile);
-
+  bp::class_<PDE> ("PDE", bp::no_init)
+    .def("Spaces", &PDE::GetSpaceTable, bp::return_value_policy<bp::reference_existing_object>())
+    .def("Variables", &PDE::GetVariableTable, bp::return_value_policy<bp::reference_existing_object>())
+    .def("Constants", &PDE::GetConstantTable, bp::return_value_policy<bp::reference_existing_object>())
+    ;
 #endif
 
 

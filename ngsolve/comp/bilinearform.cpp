@@ -551,7 +551,7 @@ namespace ngcomp
 
 
 
-  void BilinearForm :: PrintReport (ostream & ost) const
+  void BilinearForm :: PrintReport (ostream & ost)
   {
     ost << "on space " << GetFESpace().GetName() << endl
         << "symmetric   = " << symmetric << endl

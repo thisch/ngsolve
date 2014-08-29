@@ -64,7 +64,7 @@ namespace ngcomp
     }
 
     virtual string GetClassName () const;
-    virtual void PrintReport (ostream & ost) const;
+    virtual void PrintReport (ostream & ost);
     virtual void MemoryUsage (Array<MemoryUsageStruct*> & mu) const;
 
     Timer & GetTimer () { return timer; }
@@ -83,12 +83,6 @@ namespace ngcomp
   };
 
 
-  inline ostream & operator<< (ostream & ost, const NGS_Object & obj)
-  {
-    obj.PrintReport (ost);
-    return ost;
-  }
-  
 
 
   

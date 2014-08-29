@@ -49,7 +49,6 @@ namespace ngsolve
   
   PDE :: ~PDE()
   {
-    /*
     for (int i = 0; i < coefficients.Size(); i++)
       delete coefficients[i];
     coefficients.DeleteAll();
@@ -57,9 +56,8 @@ namespace ngsolve
       delete spaces[i];
     spaces.DeleteAll();
     for (int i = 0; i < gridfunctions.Size(); i++)
-      gridfunctions[i].reset();
-      //delete gridfunctions[i];
-    // gridfunctions.DeleteAll();
+      delete gridfunctions[i];
+    gridfunctions.DeleteAll();
     for (int i = 0; i < bilinearforms.Size(); i++)
       delete bilinearforms[i];
     bilinearforms.DeleteAll();
@@ -74,7 +72,6 @@ namespace ngsolve
     numprocs.DeleteAll();
     for (int i = 0; i < variables.Size(); i++)
       delete variables[i];
-    */
     for (int i = 0; i < string_constants.Size(); i++)
       delete string_constants[i];
     string_constants.DeleteAll();
@@ -144,7 +141,6 @@ namespace ngsolve
   void PDE :: LoadSolution (const string & filename, const bool ascii)
   {
 #ifdef NETGEN_ELTRANS
-    abc - bin ich hier ?
     int geometryorder = 1;
     if (constants.Used ("geometryorder"))
       geometryorder = int (constants["geometryorder"]);
@@ -351,7 +347,7 @@ namespace ngsolve
   GetCoefficientFunction (const string & name, bool opt)
   { 
     if (coefficients.Used(name))
-      return coefficients[name].get(); 
+      return coefficients[name]; 
 
     if (opt) return NULL;
     throw Exception (string ("CoefficientFunction '") + name + "' not defined\n");
@@ -360,7 +356,8 @@ namespace ngsolve
   FESpace * PDE :: 
   GetFESpace (const string & name, bool opt)
   { 
-    if (spaces.Used(name)) return spaces[name].get();
+    if (spaces.Used(name))
+      return spaces[name]; 
 
     if (opt) return NULL;
     throw Exception (string("FESpace '") + name + "' not defined\n");
@@ -370,7 +367,7 @@ namespace ngsolve
   GetGridFunction (const string & name, bool opt)
   { 
     if (gridfunctions.Used(name))
-      return gridfunctions[name].get(); 
+      return gridfunctions[name]; 
 
     if (opt) return NULL;
     throw Exception (string("GridFunction '") + name + "' not defined\n");
@@ -380,7 +377,7 @@ namespace ngsolve
   GetBilinearForm (const string & name, bool opt)
   { 
     if (bilinearforms.Used(name))
-      return bilinearforms[name].get(); 
+      return bilinearforms[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Bilinear-form '") + name + "' not defined\n");
@@ -390,7 +387,7 @@ namespace ngsolve
   GetLinearForm (const string & name, bool opt)
   {
     if (linearforms.Used(name))
-      return linearforms[name].get(); 
+      return linearforms[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Linear-form '") + name + "' not defined\n");
@@ -400,7 +397,7 @@ namespace ngsolve
   GetPreconditioner (const string & name, bool opt)
   { 
     if (preconditioners.Used(name))
-      return preconditioners[name].get(); 
+      return preconditioners[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Preconditioner '") + name + "' not defined\n");
@@ -410,7 +407,7 @@ namespace ngsolve
   GetNumProc (const string & name, bool opt)
   { 
     if (numprocs.Used(name))
-      return numprocs[name].get(); 
+      return numprocs[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Numproc '") + name + "' not defined\n");
@@ -420,7 +417,7 @@ namespace ngsolve
   GetCoefficientFunction (const string & name, bool opt) const
   { 
     if (coefficients.Used(name))
-      return coefficients[name].get(); 
+      return coefficients[name]; 
 
     if (opt) return NULL;
     throw Exception (string("CoefficientFunction '") + name + "' not defined\n");
@@ -429,7 +426,8 @@ namespace ngsolve
   const FESpace * PDE :: 
   GetFESpace (const string & name, bool opt) const
   { 
-    if (spaces.Used(name)) return spaces[name].get();
+    if (spaces.Used(name))
+      return spaces[name]; 
     
     if (opt) return NULL;
     throw Exception (string("FESpace '") + name + "' not defined\n");
@@ -439,7 +437,7 @@ namespace ngsolve
   GetGridFunction (const string & name, bool opt) const
   { 
     if (gridfunctions.Used(name))
-      return gridfunctions[name].get(); 
+      return gridfunctions[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Grid-function '") + name + "' not defined\n");
@@ -449,7 +447,7 @@ namespace ngsolve
   GetBilinearForm (const string & name, bool opt) const
   { 
     if (bilinearforms.Used(name))
-      return bilinearforms[name].get();
+      return bilinearforms[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Bilinear-form '") + name + "' not defined\n");
@@ -459,7 +457,7 @@ namespace ngsolve
   GetLinearForm (const string & name, bool opt) const
   { 
     if (linearforms.Used(name))
-      return linearforms[name].get(); 
+      return linearforms[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Linear-form '") + name + "' not defined\n");
@@ -469,7 +467,7 @@ namespace ngsolve
   GetPreconditioner (const string & name, bool opt) const
   { 
     if (preconditioners.Used(name))
-      return preconditioners[name].get(); 
+      return preconditioners[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Preconditioner '") + name + "' not defined\n");
@@ -479,7 +477,7 @@ namespace ngsolve
   GetNumProc (const string & name, bool opt) const
   { 
     if (numprocs.Used(name))
-      return numprocs[name].get(); 
+      return numprocs[name]; 
 
     if (opt) return NULL;
     throw Exception (string("Numproc '") + name + "' not defined\n");
@@ -765,8 +763,7 @@ namespace ngsolve
         if (np) AddVariable (string("timing.np.")+np->GetName(), np->GetTimer().GetTime(), 6);
       }
 
-#ifndef NGS_PYTHON
-    // we want to keep objects in python
+
     for (int i = 0; i < preconditioners.Size(); i++)
       if(!preconditioners[i]->SkipCleanUp())
 	preconditioners[i]->CleanUpLevel();
@@ -776,7 +773,7 @@ namespace ngsolve
     for (int i = 0; i < linearforms.Size(); i++)
       if(!linearforms[i]->SkipCleanUp())
 	linearforms[i]->CleanUpLevel();
-#endif
+
     // set solution data
     // for (int i = 0; i < gridfunctions.Size(); i++)
     //   gridfunctions[i]->Visualize(gridfunctions.GetName(i));
@@ -850,7 +847,7 @@ namespace ngsolve
 
             fes -> DoArchive(archive);
             fes -> FinalizeUpdate (lh);
-            spaces.Set (name, shared_ptr<FESpace>(fes));
+            spaces.Set (name, fes);
             todo.Append(fes);
           }
       }
@@ -877,7 +874,7 @@ namespace ngsolve
             archive & name & fesname;
             GridFunction * gf = CreateGridFunction (GetFESpace(fesname), name, Flags());
             // cout << "got gf, type = " << typeid(*gf).name() << endl;
-            AddGridFunction (name, shared_ptr<GridFunction> (gf));
+            AddGridFunction (name, gf);
             gridfunctions[i] -> DoArchive (archive);            
           }
       }
@@ -911,7 +908,7 @@ namespace ngsolve
       {
 	double * varp = new double;
 	*varp = val;
-	variables.Set (name, shared_ptr<double> (varp));
+	variables.Set (name, varp);
       }
   }
 
@@ -935,7 +932,7 @@ namespace ngsolve
   void PDE :: AddCoefficientFunction (const string & name, CoefficientFunction* fun)
   {
     cout << IM(1) << "add coefficient-function, name = " << name << endl;
-    coefficients.Set (name.c_str(), shared_ptr<CoefficientFunction> (fun));
+    coefficients.Set (name.c_str(), fun);
   }
 
 
@@ -1017,7 +1014,7 @@ namespace ngsolve
       }
 
     space->SetName (name);
-    spaces.Set (name, shared_ptr<FESpace>(space));
+    spaces.Set (name, space);
     todo.Append(space);
     AddVariable (string("fes.")+space->GetName()+".ndof", 0.0, 6);
 
@@ -1027,7 +1024,7 @@ namespace ngsolve
   void PDE :: AddFESpace (const string & name, FESpace * space)
   {
     space->SetName (name);
-    spaces.Set (name, shared_ptr<FESpace>(space));
+    spaces.Set (name, space);
     todo.Append(space);
   }
 
@@ -1050,15 +1047,15 @@ namespace ngsolve
  
     GridFunction * gf = CreateGridFunction (space, name, flags);
 
-    AddGridFunction (name, shared_ptr<GridFunction>(gf), true); // flags.GetDefineFlag ("addcoef"));
+    AddGridFunction (name, gf, true); // flags.GetDefineFlag ("addcoef"));
     return gf;
   }
 
-  void PDE :: AddGridFunction (const string & name, shared_ptr<GridFunction> gf, bool addcf)
+  void PDE :: AddGridFunction (const string & name, GridFunction * gf, bool addcf)
   {
     gf -> SetName (name);
     gridfunctions.Set (name, gf);
-    todo.Append(gf.get());
+    todo.Append(gf);
 
     if (addcf && (gf->GetFESpace().GetIntegrator()||gf->GetFESpace().GetEvaluator()) )
       AddCoefficientFunction (name, new GridFunctionCoefficientFunction(*gf));
@@ -1077,7 +1074,7 @@ namespace ngsolve
 	for (int i = 0; i < cfe->GetNSpaces(); i++)
 	  {
             string nname = name + "." + ToString(i+1);
-	    AddGridFunction (nname, shared_ptr<GridFunction>(gf->GetComponent(i)), addcf);
+	    AddGridFunction (nname, gf->GetComponent(i), addcf);
 	  }
       }
   }
@@ -1093,25 +1090,25 @@ namespace ngsolve
 	cerr << "space " << spacename << " not defined " << endl;
 	return 0;
       }
-    const FESpace * space = spaces[spacename].get();
+    const FESpace * space = spaces[spacename];
 
     const FESpace * space2 = NULL;
     if (flags.StringFlagDefined ("fespace2"))
-      space2 = spaces[flags.GetStringFlag ("fespace2", "")].get();
+      space2 = spaces[flags.GetStringFlag ("fespace2", "")];
   
     if (!space2)
       {
-	bilinearforms.Set (name, shared_ptr<BilinearForm>(CreateBilinearForm (space, name, flags)));
+	bilinearforms.Set (name, CreateBilinearForm (space, name, flags));
       }
     else
-      bilinearforms.Set (name, shared_ptr<BilinearForm>(new T_BilinearForm<double > (*space, *space2, name, flags)));
+      bilinearforms.Set (name, new T_BilinearForm<double > (*space, *space2, name, flags));
     
     if (flags.StringFlagDefined ("linearform"))
       bilinearforms[name] -> SetLinearForm (GetLinearForm (flags.GetStringFlag ("linearform", 0)));
 
-    todo.Append(bilinearforms[name].get());
+    todo.Append(bilinearforms[name]);
 
-    return bilinearforms[name].get();
+    return bilinearforms[name];
   }
 
 
@@ -1128,12 +1125,12 @@ namespace ngsolve
 			 "' uses undefined space '" + spacename + "'");
       }
 
-    const FESpace * space = spaces[spacename].get();
+    const FESpace * space = spaces[spacename];
 
-    linearforms.Set (name, shared_ptr<LinearForm> (CreateLinearForm (space, name, flags)));
-    todo.Append(linearforms[name].get());
+    linearforms.Set (name, CreateLinearForm (space, name, flags));
+    todo.Append(linearforms[name]);
 
-    return linearforms[name].get();
+    return linearforms[name];
   }
 
 
@@ -1240,7 +1237,7 @@ namespace ngsolve
     if (!pre)
       throw Exception ("Unknown preconditioner type " + string(type));
     
-    preconditioners.Set (name, shared_ptr<Preconditioner> (pre));
+    preconditioners.Set (name, pre);
     cout << IM(1) << ", type = " << pre->ClassName() << endl;
     
     if (!flags.GetDefineFlag ("ondemand"))
@@ -1255,7 +1252,7 @@ namespace ngsolve
   {
     cout << IM(1) << "add numproc " << name << ", type = " << np->GetClassName() << endl;
     np->SetName (name);
-    numprocs.Set (name, shared_ptr<NumProc>(np));
+    numprocs.Set (name, np);
 
     todo.Append(np);
   }

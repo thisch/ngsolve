@@ -2,28 +2,14 @@
 # Expression classes                          
 ###############################################
 
-import time
-print ("Import expr.py")
-
-def fexpr():
-    print("hallo from expr")
-
 def Expr(a):
     if isinstance(a, BaseExpr):
         return a
     try:
         return a.expr
     except:
-        raise TypeError('cannot convert ' + str(type(a)) + ' to expression')
+        return a
     
-def expr_add(a,b):
-    return Expr(a) + Expr(b)
-
-def expr_sub(a,b):
-    return Expr(a) - Expr(b)
-
-def expr_data(a,b):
-    Expr(b).AssignTo(a.expr)
 
 class BaseExpr:
     def copy(self):
@@ -44,9 +30,6 @@ class BaseExpr:
     def __add__(self, other):
         return SumExpr(self, Expr(other))
 
-    def __sub__(self, other):
-        return SumExpr(self, Expr(other).Scale(-1))
-    
     def __str__(self):
         return str(self.a)
 

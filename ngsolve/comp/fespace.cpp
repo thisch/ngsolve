@@ -577,7 +577,7 @@ lot of new non-zero entries in the matrix!\n" << endl;
   */
 
 
-  Table<int> &FESpace :: CreateDofTable (VorB vorb) const
+  Table<int> FESpace :: CreateDofTable (VorB vorb) const
   {
     TableCreator<int> creator;
     
@@ -591,7 +591,7 @@ lot of new non-zero entries in the matrix!\n" << endl;
 	  }
       }
 
-    return *creator.GetTable();
+    return creator;
   }
 
   /// get coupling type of dof
@@ -716,7 +716,7 @@ lot of new non-zero entries in the matrix!\n" << endl;
   }
 
   
-  void FESpace :: PrintReport (ostream & ost) const
+  void FESpace :: PrintReport (ostream & ost)
   {
     ost << "type  = " << GetClassName() << endl
 	<< "order = " << order << endl

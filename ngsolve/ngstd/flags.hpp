@@ -36,8 +36,6 @@ namespace ngstd
     Flags ();
     /// copy flags 
     Flags (const Flags & flags);
-    /// steal flags
-    Flags (Flags && flags) = default;
     ///
     Flags (std::initializer_list<string> list);
     /// 
@@ -50,7 +48,7 @@ namespace ngstd
     /// Sets string flag, overwrite if exists
     Flags & SetFlag (const char * name, const char * val);
     /// Sets numerical flag, overwrite if exists
-    Flags &  SetFlag (const char * name, double val) &;
+    Flags &  SetFlag (const char * name, double val);
     /// Sets boolean flag
     Flags &  SetFlag (const char * name);
     /// Sets string array flag
@@ -58,14 +56,6 @@ namespace ngstd
     /// Sets double array flag
     Flags &  SetFlag (const char * name, const Array<double> & val);
   
-    Flags SetFlag (const char * name, double val) &&
-    {
-      cout << "rvalue setflag" << endl;
-      Flags tmp = std::move(*this);
-      tmp.SetFlag (name, val);
-      return std::move(tmp);
-    }
-
     /// Save flags to file
     void SaveFlags (const char * filename) const;
     /// write flags to stream
@@ -121,15 +111,15 @@ namespace ngstd
 
     ///
     const char * GetStringFlag (int i, const char *& name) const
-    { name = strflags.GetName(i).c_str(); return strflags[i]; }
+    { name = strflags.GetName(i); return strflags[i]; }
     double GetNumFlag (int i, const char *& name) const
-    { name = numflags.GetName(i).c_str(); return numflags[i]; }
+    { name = numflags.GetName(i); return numflags[i]; }
     void GetDefineFlag (int i, const char *& name) const
-    { name = defflags.GetName(i).c_str(); }
+    { name = defflags.GetName(i); }
     const Array<double> * GetNumListFlag (int i, const char *& name) const
-    { name = numlistflags.GetName(i).c_str(); return numlistflags[i]; }
+    { name = numlistflags.GetName(i); return numlistflags[i]; }
     const Array<char*> * GetStringListFlag (int i, const char *& name) const
-    { name = strlistflags.GetName(i).c_str(); return strlistflags[i]; }
+    { name = strlistflags.GetName(i); return strlistflags[i]; }
 
     friend Archive & operator & (Archive & archive, Flags & flags);
   };

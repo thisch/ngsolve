@@ -461,7 +461,7 @@ namespace ngsolve
                         pde.GetConstantTable()[i]);
       for (int i = 0; i < pde.GetVariableTable().Size(); i++)
         DefineGlobalVariable (pde.GetVariableTable().GetName(i),
-                              pde.GetVariableTable()[i].get());
+                              pde.GetVariableTable()[i]);
       for (int i = 0; i < pde.GenericVariables().Size(); i++)
         DefineGlobalVariable (pde.GenericVariables().GetName(i),
                               &pde.GenericVariables()[i]);
@@ -486,13 +486,13 @@ namespace ngsolve
         {
           int num = arguments[i].argnum;
           if (num >= 3)
-            names[num] = arguments.GetName(i).c_str();
+            names[num] = arguments.GetName(i);
         }
       for (int i = 0; i < names.Size(); i++)
         if (names[i])
           {
             cout << "depend on " << names[i] << endl;
-            depends.Append (pde.GetCoefficientFunction(names[i]));
+            depends.Append (pde.GetCoefficientTable()[names[i]]);
           }
       return ok;
     }
@@ -1170,7 +1170,7 @@ namespace ngsolve
 					     pde->GetConstantTable()[i]);
 		      for (int i = 0; i < pde->GetVariableTable().Size(); i++)
 			fun->DefineGlobalVariable (pde->GetVariableTable().GetName(i),
-						   pde->GetVariableTable()[i].get());
+						   pde->GetVariableTable()[i]);
 		      
 		      
                       scan->WriteBack();
@@ -1298,7 +1298,7 @@ namespace ngsolve
 					     pde->GetConstantTable()[i]);
 		      for (int i = 0; i < pde->GetVariableTable().Size(); i++)
 			fun->DefineGlobalVariable (pde->GetVariableTable().GetName(i),
-						   pde->GetVariableTable()[i].get());
+						   pde->GetVariableTable()[i]);
 		      for (int i = 0; i < pde->GetCoefficientTable().Size(); i++)
 			fun->DefineArgument (pde->GetCoefficientTable().GetName(i),-1,
 					     pde->GetCoefficientTable()[i]->Dimension(),
@@ -1429,13 +1429,13 @@ namespace ngsolve
 			{
 			  int num = coeffs[0]->arguments[i].argnum;
 			  if (num >= 3)
-			    names[num] = coeffs[0]->arguments.GetName(i).c_str();
+			    names[num] = coeffs[0]->arguments.GetName(i);
 			}
 		      for (int i = 0; i < names.Size(); i++)
 			if (names[i])
 			  {
 			    cout << "depend on " << names[i] << endl;
-			    depends.Append (pde->GetCoefficientFunction(names[i]));
+			    depends.Append (pde->GetCoefficientTable()[names[i]]);
 			  }
 		    }
 

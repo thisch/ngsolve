@@ -144,25 +144,25 @@ namespace ngsolve
     ///
     SymbolTable<string*> string_constants;
     ///
-    SymbolTable<shared_ptr<double>> variables;
+    SymbolTable<double*> variables;
     ///
     SymbolTable<GenericVariable> generic_variables;
     ///
     Array<EvalVariable*> evaluators;
     ///
-    SymbolTable<shared_ptr<CoefficientFunction>> coefficients;
+    SymbolTable<CoefficientFunction*> coefficients;
     ///
-    SymbolTable<shared_ptr<FESpace>> spaces;
+    SymbolTable<FESpace*> spaces;
     ///
-    SymbolTable<shared_ptr<GridFunction>> gridfunctions;
+    SymbolTable<GridFunction*> gridfunctions;
     ///
-    SymbolTable<shared_ptr<BilinearForm>> bilinearforms;
+    SymbolTable<BilinearForm*> bilinearforms;
     ///
-    SymbolTable<shared_ptr<LinearForm>> linearforms;
+    SymbolTable<LinearForm*> linearforms;
     ///
-    SymbolTable<shared_ptr<Preconditioner>> preconditioners;
+    SymbolTable<Preconditioner*> preconditioners;
     ///
-    SymbolTable<shared_ptr<NumProc>> numprocs;
+    SymbolTable<NumProc*> numprocs;
   
     /// 
     bool isgood;
@@ -192,12 +192,6 @@ namespace ngsolve
   public:
     ///
     PDE();
-    ///
-    PDE (const string & filename)
-      : PDE() 
-    {
-      LoadPDE (filename);
-    }
     ///
     ~PDE();
 
@@ -297,7 +291,7 @@ namespace ngsolve
     ///
     GridFunction * AddGridFunction (const string & name, const Flags & flags);
     ///
-    void AddGridFunction (const string & name, shared_ptr<GridFunction> gf, bool addcf = false);
+    void AddGridFunction (const string & name, GridFunction * gf, bool addcf = false);
     ///
     BilinearForm * AddBilinearForm (const string & name, const Flags & flags);
     ///
@@ -332,32 +326,32 @@ namespace ngsolve
     SymbolTable<string*> & GetStringConstantTable ()
     { return string_constants; }
     ///
-    SymbolTable<shared_ptr<double>> & GetVariableTable ()
+    SymbolTable<double*> & GetVariableTable ()
     { return variables; }
 
     SymbolTable<GenericVariable> & GenericVariables() { return generic_variables; }
     const SymbolTable<GenericVariable> & GenericVariables() const { return generic_variables; }
 
     ///
-    SymbolTable<shared_ptr<CoefficientFunction>> & GetCoefficientTable ()
+    SymbolTable<CoefficientFunction*> & GetCoefficientTable ()
     { return coefficients; }
     ///
-    SymbolTable<shared_ptr<FESpace>> & GetSpaceTable ()
+    SymbolTable<FESpace*> & GetSpaceTable ()
     { return spaces; }
     ///
-    SymbolTable<shared_ptr<GridFunction>> & GetGridFunctionTable()
+    SymbolTable<GridFunction*> & GetGridFunctionTable()
     { return gridfunctions; }
     ///
-    SymbolTable<shared_ptr<BilinearForm>> & GetBilinearFormTable()
+    SymbolTable<BilinearForm*> & GetBilinearFormTable()
     { return bilinearforms; }
     ///
-    SymbolTable<shared_ptr<LinearForm>> & GetLinearFormTable()
+    SymbolTable<LinearForm*> & GetLinearFormTable()
     { return linearforms; }
     ///
-    SymbolTable<shared_ptr<Preconditioner>> & GetPreconditionerTable ()
+    SymbolTable<Preconditioner*> & GetPreconditionerTable ()
     { return preconditioners; }
     ///
-    SymbolTable<shared_ptr<NumProc>> & GetNumProcTable()
+    SymbolTable<NumProc*> & GetNumProcTable()
     { return numprocs; }  
 
 

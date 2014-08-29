@@ -185,7 +185,7 @@ namespace ngcomp
     { return (vb == VOL) ? *element_coloring : *selement_coloring; }
 
     /// print report to stream
-    virtual void PrintReport (ostream & ost) const;
+    virtual void PrintReport (ostream & ost);
 
     /// Dump/restore fespace
     virtual void DoArchive (Archive & archive);
@@ -241,7 +241,7 @@ namespace ngcomp
 	GetDofNrs (ei.Nr(), dnums);
     }
 
-    Table<int> &CreateDofTable (VorB vorb) const;
+    Table<int> CreateDofTable (VorB vorb) const;
 
     // virtual void GetDofRanges (ElementId ei, Array<IntRange> & dranges) const;
 
@@ -519,7 +519,7 @@ namespace ngcomp
     }
   };
 
-  
+
 
   template <typename T>
   inline void IterateElements (const FESpace & fes, 

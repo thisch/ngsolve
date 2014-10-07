@@ -55,7 +55,7 @@ namespace ngfem
 	  {
 	    ipdata[i].shape.AssignMemory (ndof, hp);
 	    hp += ndof*D;
-	    ipdata[i].curlshape.AssignMemory (ndof, hp);
+            ipdata[i].curlshape.AssignMemory (ndof, hp);
 	    hp += ndof*DIM_CURL;
 
 	    CalcShape (*ipts[i], ipdata[i].shape);

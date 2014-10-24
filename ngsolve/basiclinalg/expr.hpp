@@ -1295,8 +1295,17 @@ namespace ngbla
     if (a.Height() == 0) return 0; 
 
     auto sum = InnerProduct (a.Spec()(0), b.Spec()(0));
-    for (int i = 1; i < a.Height(); i++)
-      sum += InnerProduct (a.Spec()(i), b.Spec()(i));
+    #pragma omp parallel
+    {
+      decltype (InnerProduct(a.Spec()(0), b.Spec()(0))) isum = 0.0;
+
+      #pragma omp for schedule(static, 1)
+      for (int i = 1; i < a.Height(); i++)
+	isum += InnerProduct (a.Spec()(i), b.Spec()(i));
+
+      #pragma omp critical
+      sum += isum;
+    }
     return sum;
   }
 

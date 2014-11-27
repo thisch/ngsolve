@@ -26,12 +26,12 @@ int main ()
   // do some math:
   v = m * u;
 
-  cout << "u = " << u << endl;
-  cout << "v = " << v << endl;
-  cout << "m = " << m << endl;
+  cout << "u = " << endl << u << endl;
+  cout << "v = " << endl << v << endl;
+  cout << "m = " << endl << m << endl;
 
   // use result directly
-  cout << "Trans(m) * v = " << Trans(m) * v << endl;
+  cout << "Trans(m) * v = " << endl << Trans(m) * v << endl;
 
   // fix-size objects:
   Vec<3,double> u3;
@@ -56,6 +56,16 @@ int main ()
 
   cout << "(u,v) = " << InnerProduct (fu, fv) << endl;
   cout << "(w,w) = " << InnerProduct (fw, fw) << endl;
+
+
+
+  // access row/col of matrix:
+  cout << "Row 2 of m is " << endl << m.Row(2) << endl;
+  cout << "type is " << typeid(m.Row(2)).name() << endl;
+
+  cout << "Col 1 of m is " << endl << m.Col(1) << endl;
+  cout << "type is " << typeid(m.Col(1)).name() << endl;
+
 
   // more complicated vectors
   Vector<Vec<2,Complex> > sysu(4);
@@ -88,18 +98,16 @@ int main ()
   a = 1.0;
   b = 1.0;
 
-  clock_t starttime, endtime;
-
-  starttime = clock();
+  Timer timer_ip_double("InnerProduct double");
+  timer_ip_double.Start();
 
   double sum = 0;
   for (int i = 0; i < 1000000; i++)
     sum += InnerProduct (a, b);
 
-  endtime = clock();
-  cout << "time = " << double(endtime - starttime) / CLOCKS_PER_SEC << endl;
+  timer_ip_double.Stop();
+  timer_ip_double.AddFlops (1000000*double(a.Size()));
   cout << "sum = " << sum << endl;
-
 
   // Vector<Complex> ac(1000);
   // Vector<Complex> bc(1000);
@@ -110,16 +118,17 @@ int main ()
   ac = 1.0;
   bc = 1.0;
 
-  starttime = clock();
+  Timer timer_ip_complex("InnerProduct complex");
+  timer_ip_complex.Start();
 
   Complex sumc = 0;
   for (int i = 0; i < 100000; i++)
     sumc += InnerProduct (ac, bc);
 
-  endtime = clock();
-  cout << "time = " << double(endtime - starttime) / CLOCKS_PER_SEC << endl;
-  cout << "sum = " << sumc << endl;
+  timer_ip_complex.Stop();
+  timer_ip_complex.AddFlops (100000*double(ac.Size()));
 
+  cout << "sum = " << sumc << endl;
 
 
   LocalHeap lh(10000, "demobla - localheap");
@@ -156,7 +165,8 @@ int main ()
   vx = 0;
   vx(4) = 1;
   cholm.Mult (vx, vy);
-  cout << "inv * e1 = " << vy << endl;
+  cout << "inv * e5 = " << endl << vy << endl;
+  cout << "check, e5 =?= " << endl << sm*vy << endl;
 
   
   Matrix<double> evecs(5);
@@ -166,11 +176,10 @@ int main ()
        << "evecs = " << evecs << endl;
 
 
-  
-  Array<int> rows(2);
-  rows[0] = 1;
-  rows[1] = 3;
-  cout << "rows " << rows << " of sm are " << endl << sm.Rows(rows).Cols(rows) << endl;
+  // indirect access of matrix rows/cols
+  Array<int> rows = { 1, 3 };
+  cout << "rows/cols " << endl << rows 
+       << "of sm are " << endl << sm.Rows(rows).Cols(rows) << endl;
 
   Matrix<> bmat(5,5), cmat(5,5);
   bmat = 0.0;
@@ -185,19 +194,14 @@ int main ()
     a = 1;
     b = 2;
 
-
     timer.Start();
-    // old style:
-    // LapackMult (Trans(a), b, c);
-
-    // new style:
     c = Trans(a) * b   | Lapack;  
     timer.Stop();
     timer.AddFlops (double(a.Height())*a.Width()*b.Width());
-
-    NgProfiler::Print (stdout);
   }
 
+
+  NgProfiler::Print (stdout);
   return 0;
 }
 

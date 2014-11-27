@@ -1,5 +1,7 @@
 #include <stdlib.h>
+using namespace std;
 #include <nginterface.h>
+namespace ngstd { class Archive; }
 #include <nginterface_v2.hpp>
 
 #include <ng_mesh1d.hpp>
@@ -15,9 +17,7 @@ namespace netgen
 
   Ng_Point Ng_GetPoint (int nr)
   {
-    Ng_Point pnt;
-    pnt.pt = &mesh1d.points[nr][0];
-    return pnt;
+    return Ng_Point (&mesh1d.points[nr][0]);
   }
 
   template<> Ng_Element Ng_GetElement<0> (int nr) 

@@ -11,9 +11,9 @@ class Mesh1D_Base
 {
 public:
   int ne;
-  Array<double[1]> points;
-  Array<int[2]> els;
-  Array<int[1]> bound_els;
+  Array<INT<1,double>> points;
+  Array<INT<2>> els;
+  Array<INT<1>> bound_els;
 };
 
 extern Mesh1D_Base mesh1d;

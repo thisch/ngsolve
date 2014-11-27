@@ -70,9 +70,8 @@ int main ()
   H1HighOrderFE<ET_TRIG> trig(2);
 
   // integrators for (\nabla u, \nabla v) and (u,v)
-  ConstantCoefficientFunction coef(1);
-  LaplaceIntegrator<2> laplace(&coef);
-  MassIntegrator<2> mass(&coef);
+  LaplaceIntegrator<2> laplace(make_shared<ConstantCoefficientFunction>(1));
+  MassIntegrator<2> mass(make_shared<ConstantCoefficientFunction>(1));
 
 
   // element geometry:

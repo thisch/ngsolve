@@ -57,7 +57,9 @@ int main ()
   // initialize heap memory handler with 1000 bytes
   LocalHeap lh(1000, "demo - localheap");
 
-  int * ip = lh.Alloc<int> (5);
+  cout << "available: " << lh.Available() << endl;
+
+  int * ip = new (lh) int [5];
   cout << "available: " << lh.Available() << endl;
   
   // stores pointer to current position

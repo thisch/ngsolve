@@ -932,6 +932,9 @@ namespace ngsolve
   void PDE :: AddCoefficientFunction (const string & name, CoefficientFunction* fun)
   {
     cout << IM(1) << "add coefficient-function, name = " << name << endl;
+    if (coefficients.Used(name)) {
+      delete coefficients[name];
+    }
     coefficients.Set (name.c_str(), fun);
   }
 
@@ -1057,8 +1060,11 @@ namespace ngsolve
     gridfunctions.Set (name, gf);
     todo.Append(gf);
 
-    if (addcf && (gf->GetFESpace().GetIntegrator()||gf->GetFESpace().GetEvaluator()) )
-      AddCoefficientFunction (name, new GridFunctionCoefficientFunction(*gf));
+    if (addcf && (gf->GetFESpace().GetIntegrator()||gf->GetFESpace().GetEvaluator()) ) {
+      string var_name = name + "_comp";
+      AddVariable(var_name, 0.0, 6);
+      AddCoefficientFunction (name, new GridFunctionCoefficientFunction(*gf, GetVariable(var_name, false)));
+    }
     
     if (addcf && gf->GetFESpace().GetFluxEvaluator())
       {

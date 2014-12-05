@@ -213,11 +213,11 @@ namespace ngcomp
   protected:
     const GridFunction & gf;
     const DifferentialOperator * diffop;
-    int comp;
+    const double &comp;
   public:
-    GridFunctionCoefficientFunction (const GridFunction & agf, int acomp = 0);
+    GridFunctionCoefficientFunction (const GridFunction & agf, const double &acomp = 0);
     GridFunctionCoefficientFunction (const GridFunction & agf, 
-                                     const DifferentialOperator * adiffop, int acomp = 0);
+                                     const DifferentialOperator * adiffop, const double &comp = 0);
     
     virtual ~GridFunctionCoefficientFunction ();
     /// scalar valued or vector valued

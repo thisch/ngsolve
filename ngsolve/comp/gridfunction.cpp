@@ -4,7 +4,7 @@
 #include <parallelngs.hpp>
 #include <stdlib.h>
 
-
+#include <boost/math/special_functions/round.hpp>
 
 namespace ngcomp
 {
@@ -765,7 +765,7 @@ namespace ngcomp
 
 
   GridFunctionCoefficientFunction :: 
-  GridFunctionCoefficientFunction (const GridFunction & agf, int acomp)
+  GridFunctionCoefficientFunction (const GridFunction & agf, const double &acomp)
     : gf(agf), diffop (NULL), comp (acomp) 
   {
     diffop = gf.GetFESpace().GetEvaluator();
@@ -773,7 +773,7 @@ namespace ngcomp
 
   GridFunctionCoefficientFunction :: 
   GridFunctionCoefficientFunction (const GridFunction & agf, 
-				   const DifferentialOperator * adiffop, int acomp)
+				   const DifferentialOperator * adiffop, const double &acomp)
     : gf(agf), diffop (adiffop), comp (acomp) 
   {
     ;
@@ -811,6 +811,7 @@ namespace ngcomp
     LocalHeapMem<100000> lh2 ("GridFunctionCoefficientFunction, Eval 2");
     static Timer timer ("GFCoeffFunc::Eval-scal");
     RegionTimer reg (timer);
+    const int compi = boost::math::iround(comp);
 
     const ElementTransformation & trafo = ip.GetTransformation();
     
@@ -845,7 +846,7 @@ namespace ngcomp
     
     VectorMem<50> elu(dnums.Size()*dim);
 
-    gf.GetElementVector (comp, dnums, elu);
+    gf.GetElementVector (compi, dnums, elu);
     fes.TransformVec (elnr, boundary, elu, TRANSFORM_SOL);
 
     if (diffop)
@@ -860,8 +861,9 @@ namespace ngcomp
     LocalHeapMem<100000> lh2 ("GridFunctionCoefficientFunction, Eval complex");
     static Timer timer ("GFCoeffFunc::Eval-scal");
     RegionTimer reg (timer);
+    const int compi = boost::math::iround(comp);
 
-    
+
     const int elnr = ip.GetTransformation().GetElementNr();
     bool boundary = ip.GetTransformation().Boundary();
 
@@ -881,7 +883,7 @@ namespace ngcomp
     
     VectorMem<50, Complex> elu(dnums.Size()*dim);
 
-    gf.GetElementVector (comp, dnums, elu);
+    gf.GetElementVector (compi, dnums, elu);
     fes.TransformVec (elnr, boundary, elu, TRANSFORM_SOL);
 
     if (diffop)
@@ -897,6 +899,7 @@ namespace ngcomp
     LocalHeapMem<100000> lh2("GridFunctionCoefficientFunction - Evalute 3");
     static Timer timer ("GFCoeffFunc::Eval-vec");
     RegionTimer reg (timer);
+    const int compi = boost::math::iround(comp);
 
     const ElementTransformation & trafo = ir.GetTransformation();
     
@@ -926,7 +929,7 @@ namespace ngcomp
     
     VectorMem<50> elu(dnums.Size()*dim);
 
-    gf.GetElementVector (comp, dnums, elu);
+    gf.GetElementVector (compi, dnums, elu);
     fes.TransformVec (elnr, boundary, elu, TRANSFORM_SOL);
 
     if (diffop)

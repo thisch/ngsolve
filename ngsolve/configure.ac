@@ -152,8 +152,8 @@ echo "from pythond devel: python ld = $PYTHON_LDFLAGS"
 echo "from boost python:  boost_python_lib = $BOOST_PYTHON_LIB"
 
 # why does it choose boost_python-py27 when available ????
-# AC_SUBST(BOOST_PYTHON_LIB, boost_python-py34)
-# echo "modified boost python:  boost_python_lib = $BOOST_PYTHON_LIB"
+AC_SUBST(BOOST_PYTHON_LIB, boost_python3)
+echo "modified boost python:  boost_python_lib = $BOOST_PYTHON_LIB"
 
 pyon=false
 AC_ARG_ENABLE([python],

@@ -206,6 +206,10 @@ namespace ngsolve
     void SaveSolution (const string & filename, const bool ascii = false);
     ///
     void LoadSolution (const string & filename, const bool ascii = false);
+
+
+    void LoadSolutionSetup ();
+    void LoadSolutionSpecific (const string & filename, const bool ascii = false, size_t gfidx=0);
     ///  
     void Solve ();
     // void SolveBVP () { Solve(); }

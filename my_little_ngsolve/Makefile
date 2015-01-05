@@ -1,4 +1,4 @@
-NGSCXX = /opt/netgen-5.3/bin/ngscxx
+NGSCXX = ngscxx
 
 objects = demo_instat.o myElement.o myHOElement.o myIntegrator.o \
 demo_coupling.o myFESpace.o myHOFESpace.o myPreconditioner.o	 \

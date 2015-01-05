@@ -123,22 +123,25 @@ namespace ngsolve
 
 	if(gridfunctions[i]->IsUpdated())
 	  {
-	    if(ascii)
-	      gridfunctions[i]->GetVector().SaveText (outfile);
-	    else
-	      gridfunctions[i]->GetVector().Save (outfile);
+            for( int j =0; j < gridfunctions[i]->GetMultiDim(); j++)
+              {
+	        if(ascii)
+                  gridfunctions[i]->GetVector(j).SaveText (outfile);
+                else
+                  gridfunctions[i]->GetVector(j).Save (outfile);
+              }
 	  }
 	else
 	  {
 	    cerr << "ERROR: Gridfunction \"" << gridfunctions.GetName(i) << "\" is not initialized" << endl
-		 << "       => not in the output file" << endl;
+                 << "       => not in the output file" << endl;
 	  }
       }
     outfile.close();
   }
 
   ///
-  void PDE :: LoadSolution (const string & filename, const bool ascii)
+    void PDE :: LoadSolution (const string & filename, const bool ascii)
   {
 #ifdef NETGEN_ELTRANS
     int geometryorder = 1;
@@ -150,29 +153,73 @@ namespace ngsolve
       rational = bool (constants["rationalgeometry"]);
 
     Ng_HighOrder (geometryorder, rational);
-#endif    
+#endif
 
     ifstream infile;
     if(ascii)
-      infile.open(filename.c_str());
+        infile.open(filename.c_str());
     else
-      infile.open(filename.c_str(), ios_base::binary);
+        infile.open(filename.c_str(), ios_base::binary);
 
     LocalHeap lh(100009, "PDE - Loadsolution");
-    for (int i = 0; i < spaces.Size(); i++)
-      {
-	spaces[i]->Update(lh);
-	spaces[i]->FinalizeUpdate(lh);
-      }
-    for (int i = 0; i < gridfunctions.Size(); i++)
-      {
-	gridfunctions[i]->Update();
-	cout << IM(1) << "Loading gridfunction " << gridfunctions.GetName(i) << endl;
-	if(ascii)
-	  gridfunctions[i]->GetVector().LoadText (infile);
-	else
-	  gridfunctions[i]->GetVector().Load (infile);
-      }
+    for (int i = 0; i < spaces.Size(); i++) {
+        spaces[i]->Update(lh);
+        spaces[i]->FinalizeUpdate(lh);
+    }
+    cout << "GF SZ" << gridfunctions.Size() << endl;
+    for (int i = 0; i < gridfunctions.Size(); i++) {
+        gridfunctions[i]->Update();
+        cout << IM(1) << "Loading gridfunction " << gridfunctions.GetName(i) << endl;
+        for( int j =0; j < gridfunctions[i]->GetMultiDim(); j++) {
+            if(ascii)
+                gridfunctions[i]->GetVector(j).LoadText (infile);
+            else
+                gridfunctions[i]->GetVector(j).Load (infile);
+        }
+    }
+    infile.close();
+  }
+
+    void PDE :: LoadSolutionSetup () {
+#ifdef NETGEN_ELTRANS
+    int geometryorder = 1;
+    if (constants.Used ("geometryorder"))
+      geometryorder = int (constants["geometryorder"]);
+
+    bool rational = false;
+    if (constants.Used ("rationalgeometry"))
+      rational = bool (constants["rationalgeometry"]);
+
+    Ng_HighOrder (geometryorder, rational);
+#endif
+    LocalHeap lh(100009, "PDE - Loadsolution");
+    for (int i = 0; i < spaces.Size(); i++) {
+        spaces[i]->Update(lh);
+        spaces[i]->FinalizeUpdate(lh);
+    }
+    }
+
+    void PDE :: LoadSolutionSpecific (const string & filename, const bool ascii, size_t gfidx)
+  {
+    ifstream infile;
+    if(ascii)
+        infile.open(filename.c_str());
+    else
+        infile.open(filename.c_str(), ios_base::binary);
+
+    cout << "GF SZ" << gridfunctions.Size() << endl;
+    if (gfidx >= gridfunctions.Size()) {
+        cerr << "gfidx is >= size of defined gridfunctions in pde file" << endl;
+    }
+
+    gridfunctions[gfidx]->Update();
+    cout << IM(1) << "Loading gridfunction " << gridfunctions.GetName(gfidx) << endl;
+    for( int j =0; j < gridfunctions[gfidx]->GetMultiDim(); j++) {
+        if(ascii)
+            gridfunctions[gfidx]->GetVector(j).LoadText (infile);
+        else
+            gridfunctions[gfidx]->GetVector(j).Load (infile);
+    }
     infile.close();
   }
 

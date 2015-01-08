@@ -738,6 +738,8 @@ namespace ngla
     FlatVector<TVY> fy = y.FV<TVY>(); 
     
     int h = this->Height();
+
+    #pragma omp parallel for schedule(static, 1)
     for (int i = 0; i < h; i++)
       fy(i) += s * RowTimesVector (i, fx);
 
@@ -790,6 +792,7 @@ namespace ngla
     FlatVector<TVY> fy = y.FV<TVY> (); // (y.Size(), y.Memory());
 
     int h = this->Height();
+    #pragma omp parallel for schedule(static, 1)
     for (int i = 0; i < h; i++)
       fy(i) += ConvertTo<TSCAL> (s) * RowTimesVector (i, fx);
   }

@@ -182,6 +182,10 @@ namespace ngla
     // time1 = clock();
     cout << IM(3) << "call pardiso ..." << flush;
 
+    for (int i = 0; i < 64; i++)
+        cout << "D debug iparam(" << i + 1 << ") = " << params[i] << endl;
+    cout << "msglevel " << msglevel << endl;
+
     // retvalue = 
     F77_FUNC(pardiso) ( pt, &maxfct, &mnum, &matrixtype, &phase, &compressed_height, 
 			reinterpret_cast<double *>(&matrix[0]),
@@ -189,6 +193,9 @@ namespace ngla
 			NULL, NULL, &error );
     
     cout << IM(3) << " done" << endl;
+
+    for (int i = 0; i < 64; i++)
+        cout << "D output debug iparam(" << i + 1 << ") = " << params[i] << endl;
 
     if ( error != 0 )
       {
@@ -216,6 +223,13 @@ namespace ngla
 	    }
 	  default: ;
 	  }
+
+  for (int i = 0; i < 64; i++)
+      cout << "debug iparam(" << i + 1 << ") = " << params[i] << endl;
+  int maxpeakmem = std::max(params[14], params[15] + params[16]); // in kB
+  // see parsiso manual page 15 & 16
+  cout << "###### peak mem required " << static_cast<double>(maxpeakmem)/(1024*1024)
+       << " GB" <<endl;
 
 	cout << "symmetric = " << symmetric << endl;
 	cout << "spd = " << spd << endl;

@@ -197,61 +197,55 @@ namespace ngla
     for (int i = 0; i < 64; i++)
         cout << "D output debug iparam(" << i + 1 << ") = " << params[i] << endl;
 
-    if ( error != 0 )
-      {
-	cout << "Setup and Factorization: PARDISO returned error " << error << "!" << endl;
-	
-	string errmsg;
-	switch (error)
-	  {
-	  case -1: errmsg = "input inconsistent"; break;
-	  case -2: errmsg = "not enough memory"; break;
-	  case -3: errmsg = "reordering problem"; break;
-	  case -4: errmsg = "zero pivot, numerical factorization or iterative refinement problem"; break;
-	  case -5: errmsg = "unclassified (internal) error"; break;
-	  case -6: errmsg = "preordering failed"; break;
-	  default: ;
-	  }
-	
-	cout << "err = " << errmsg << endl;
+    for (int i = 0; i < 64; i++)
+        cout << "debug iparam(" << i + 1 << ") = " << params[i] << endl;
+    int maxpeakmem = std::max(params[14], params[15] + params[16]); // in kB
+    // see parsiso manual page 15 & 16
+    cout << "###### peak mem required " << static_cast<double>(maxpeakmem)/(1024*1024)
+         << " GB" <<endl;
 
-	switch (error)
-	  {
-	  case -4: 
-	    {
-	      cout << "iparam(20) = " << params[19] << endl; break;
-	    }
-	  default: ;
-	  }
+    if ( error != 0 ) {
+        cout << "Setup and Factorization: PARDISO returned error " << error << "!" << endl;
 
-  for (int i = 0; i < 64; i++)
-      cout << "debug iparam(" << i + 1 << ") = " << params[i] << endl;
-  int maxpeakmem = std::max(params[14], params[15] + params[16]); // in kB
-  // see parsiso manual page 15 & 16
-  cout << "###### peak mem required " << static_cast<double>(maxpeakmem)/(1024*1024)
-       << " GB" <<endl;
+        string errmsg;
+        switch (error) {
+        case -1: errmsg = "input inconsistent"; break;
+        case -2: errmsg = "not enough memory"; break;
+        case -3: errmsg = "reordering problem"; break;
+        case -4: errmsg = "zero pivot, numerical factorization or iterative refinement problem"; break;
+        case -5: errmsg = "unclassified (internal) error"; break;
+        case -6: errmsg = "preordering failed"; break;
+        default: ;
+        }
 
-	cout << "symmetric = " << symmetric << endl;
-	cout << "spd = " << spd << endl;
-	cout << "compressed = " << compressed << endl;
-	cout << "inner = " << inner << endl;
-	cout << "cluster = " << cluster << endl;
+        cout << "err = " << errmsg << endl;
 
-	ofstream err("pardiso.err");
-	err << "ngsolve-matrix = " << endl << a << endl;
-	err << "pardiso matrix = " << endl;
-	for (int i = 0; i < compressed_height; i++)
-	  {
-	    err << "Row " << i << " start " << rowstart[i] << ": ";
-	    if ( inner ) err << " free=" << inner->Test(i) << " ";
-	    if ( cluster ) err << " cluster=" << (*cluster)[i] << " ";
-	    for (int j = rowstart[i]; j < rowstart[i+1]; j++)
-	      err << "c=" << indices[j-1]-1 << ", v=" << matrix[j-1] << "   ";
-	    err << "\n";
-	  }
-	
-	cout << "wrote matrix to file 'pardiso.err', please check" << endl;
-	throw Exception("PardisoInverse: Setup and Factorization failed.");
+        switch (error) {
+        case -4: cout << "iparam(20) = " << params[19] << endl; break;
+        default: ;
+        }
+
+        cout << "symmetric = " << symmetric << endl;
+        cout << "spd = " << spd << endl;
+        cout << "compressed = " << compressed << endl;
+        cout << "inner = " << inner << endl;
+        cout << "cluster = " << cluster << endl;
+
+        // ofstream err("pardiso.err");
+        // err << "ngsolve-matrix = " << endl << a << endl;
+        // err << "pardiso matrix = " << endl;
+        // for (int i = 0; i < compressed_height; i++)
+        //   {
+        //     err << "Row " << i << " start " << rowstart[i] << ": ";
+        //     if ( inner ) err << " free=" << inner->Test(i) << " ";
+        //     if ( cluster ) err << " cluster=" << (*cluster)[i] << " ";
+        //     for (int j = rowstart[i]; j < rowstart[i+1]; j++)
+        //       err << "c=" << indices[j-1]-1 << ", v=" << matrix[j-1] << "   ";
+        //     err << "\n";
+        //   }
+
+        // cout << "wrote matrix to file 'pardiso.err', please check" << endl;
+        throw Exception("PardisoInverse: Setup and Factorization failed.");
       }
 
     /*

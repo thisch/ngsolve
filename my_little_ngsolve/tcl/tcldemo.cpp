@@ -13,10 +13,6 @@ using namespace ngsolve;
 
 static PDE * global_pde;
 
-template <class T>
-shared_ptr<T> make_shared_noop(T* p) {
-    return shared_ptr<T>(p, NOOP_Deleter);
-}
 
 int NGS_TclDemo (ClientData clientData,
                  Tcl_Interp * interp,
@@ -26,14 +22,13 @@ int NGS_TclDemo (ClientData clientData,
   cout << "argv[1] = " << argv[1] << endl;
 
   EvalFunction eval(argv[1]);
-  Array<shared_ptr<EvalFunction>> ae(1); 
-//  ae[0] = shared_ptr<EvalFunction>(&eval, NOOP_Deleter);
-  ae[0] = make_shared_noop(&eval);
+  Array<EvalFunction*> ae(1); 
+  ae[0] = &eval;
 
-  DomainVariableCoefficientFunction coef(ae);
+  DomainVariableCoefficientFunction<2> coef(ae);
 
   LocalHeap lh(1000000, "tcldemo-heap");
-  SetValues(shared_ptr<DomainVariableCoefficientFunction>(&coef,NOOP_Deleter), *global_pde->GetGridFunction("u"), VOL, NULL, lh);
+  SetValues (coef, *global_pde->GetGridFunction("u"), VOL, NULL, lh);
   return TCL_OK;
 }
 

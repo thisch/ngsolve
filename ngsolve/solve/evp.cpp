@@ -93,13 +93,12 @@ namespace ngsolve
             
             ofstream eigenout(filename.c_str());
             eigenout.precision(16);
-            for (int i = 0; i < lam.Size(); ++i)
+            for (int i = 0; i < nev; ++i) {
               eigenout << lam[i].real() << "\t" << lam[i].imag() << "\t"
                        << sqrt(lam[i]).real() << "\t" << sqrt(lam[i]).imag() 
                        << endl;
-            
-            for (int i = 0; i < nev; i++)
               gfu->GetVector(i) = *evecs[i];
+            }
 
             cout << "lam = " << endl << lam << endl;
           }

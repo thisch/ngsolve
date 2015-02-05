@@ -1005,7 +1005,7 @@ namespace ngcomp
 
     try
       {
-	LocalHeapMem<100000> lh("visgf::getvalue");
+	LocalHeapMem<1000005> lh("visgf::getvalue");
 	if (!bfi3d.Size()) return false;
 	if (gf -> GetLevelUpdated() < ma.GetNLevels()) return false;
 	const FESpace & fes = gf->GetFESpace();
@@ -1087,7 +1087,7 @@ namespace ngcomp
     
     try
       {
-	LocalHeapMem<100000> lh("visgf::getvalue");
+	LocalHeapMem<1000005> lh("visgf::getvalue");
         
 	if (!bfi3d.Size()) return 0;
 	if (gf -> GetLevelUpdated() < ma.GetNLevels()) return 0;
@@ -1189,7 +1189,7 @@ namespace ngcomp
         int dim = fes.GetDimension();
 	
         // HeapReset hr(lh);
-        LocalHeapMem<100000> lh("visgf::GetMultiValue");
+        LocalHeapMem<1000005> lh("visgf::GetMultiValue");
 
 	ElementTransformation & eltrans = ma.GetTrafo (elnr, false, lh);
 	const FiniteElement * fel = &fes.GetFE (elnr, lh);
@@ -1305,7 +1305,7 @@ namespace ngcomp
 
 	int dim = fes.GetDimension();
 
-	LocalHeapMem<100000> lh("VisGF::GetSurfValue");
+	LocalHeapMem<1000005> lh("VisGF::GetSurfValue");
 	const FiniteElement * fel = &fes.GetFE (elnr, bound, lh);
 
 	ArrayMem<int, 100> dnums;
@@ -1383,7 +1383,7 @@ namespace ngcomp
         int dim     = fes.GetDimension();
 
 	// lh.CleanUp();
-        LocalHeapMem<100000> lh("VisGF::GetSurfValue");
+        LocalHeapMem<1000005> lh("VisGF::GetSurfValue");
 	const FiniteElement * fel = &fes.GetFE (elnr, bound, lh);
 	
 	Array<int> dnums(fel->GetNDof(), lh);
@@ -1498,7 +1498,7 @@ namespace ngcomp
         int dim = fes.GetDimension();
         
         
-        LocalHeapMem<100000> lh("visgf::getmultisurfvalue");
+        LocalHeapMem<1000005> lh("visgf::getmultisurfvalue");
 
 	ElementTransformation & eltrans = ma.GetTrafo (elnr, bound, lh);
 
@@ -1606,7 +1606,7 @@ namespace ngcomp
   {
     if (ma.GetDimension() != 1) return false;
 
-    LocalHeapMem<100000> lh("visgf::getsegmentvalue");
+    LocalHeapMem<1000005> lh("visgf::getsegmentvalue");
 
     const FESpace & fes = gf->GetFESpace();
     const DifferentialOperator * eval = fes.GetEvaluator (VOL);
@@ -1687,7 +1687,7 @@ namespace ngcomp
     Array<double> posz;
     ELEMENT_TYPE cache_type = ET_SEGM;
 	
-    LocalHeapMem<10000> lh2("Gridfunction - Analyze");
+    LocalHeapMem<100000> lh2("Gridfunction - Analyze");
 	
     val = new double[components];
 			
@@ -1867,7 +1867,7 @@ namespace ngcomp
 						 double lam1, double lam2, double lam3,
 						 double * values) 
   {
-    LocalHeapMem<100000> lh("viscf::GetValue");
+    LocalHeapMem<1000000> lh("viscf::GetValue");
     IntegrationPoint ip(lam1, lam2, lam3);
     ElementTransformation & trafo = ma.GetTrafo (elnr, VOL, lh);
     BaseMappedIntegrationPoint & mip = trafo(ip, lh);
@@ -1883,7 +1883,7 @@ namespace ngcomp
 	    const double xref[], const double x[], const double dxdxref[],
 	    double * values) 
   {
-    LocalHeapMem<100000> lh("viscf::GetValue xref");
+    LocalHeapMem<1000000> lh("viscf::GetValue xref");
     IntegrationPoint ip(xref[0],xref[1],xref[2]);
     ElementTransformation & trafo = ma.GetTrafo (elnr, VOL, lh);
     BaseMappedIntegrationPoint & mip = trafo(ip, lh);
@@ -1910,7 +1910,7 @@ namespace ngcomp
 		double lam1, double lam2, 
 		double * values) 
   {
-    LocalHeapMem<100000> lh("viscf::GetSurfValue");
+    LocalHeapMem<1000000> lh("viscf::GetSurfValue");
     IntegrationPoint ip(lam1, lam2);
     ip.FacetNr() = facetnr;
     bool bound = ma.GetDimension() == 3;

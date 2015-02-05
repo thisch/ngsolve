@@ -541,6 +541,7 @@ namespace ngsolve
     size_t heapsize = 1000000;
     if (constants.Used ("heapsize"))
       heapsize = size_t(constants["heapsize"]);
+    std::cout << "heapsize in pde::solve "  << heapsize << std::endl;
 
 #ifdef _OPENMP
     if (constants.Used ("numthreads"))

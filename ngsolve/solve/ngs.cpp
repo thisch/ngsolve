@@ -1,4 +1,5 @@
 #include <solve.hpp>
+#include <cstdlib>
 
 namespace netgen
 {
@@ -8,10 +9,11 @@ namespace netgen
 
 int main(int argc, char ** argv)
 {
+  int retcode = EXIT_SUCCESS;
   if (argc < 2)
     {
       std::cout << "Usage:  ngs filename" << std::endl;
-      exit(1);
+      exit(EXIT_FAILURE);
     }
 
   netgen::h_argc = argc;
@@ -20,11 +22,11 @@ int main(int argc, char ** argv)
 
   ngsolve::MyMPI mympi(argc, argv);
 
-  ngsolve::PDE pde; 
+  ngsolve::PDE pde;
 
   try
     {
-      pde.LoadPDE (argv[argc-1]); 
+      pde.LoadPDE (argv[argc-1]);
       pde.Solve();
     }
 
@@ -32,8 +34,9 @@ int main(int argc, char ** argv)
     {
       std::cout << "Caught exception: " << std::endl
                 << e.What() << std::endl;
-    };
 
+      retcode = EXIT_FAILURE;
+    };
 
 #ifdef PARALLEL
   int id;
@@ -45,6 +48,5 @@ int main(int argc, char ** argv)
   fclose(prof);
 #endif
 
-
-  return 0;
+  return retcode;
 }

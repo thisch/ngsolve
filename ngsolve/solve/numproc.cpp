@@ -1,6 +1,7 @@
 #include <solve.hpp>
 #include <ctime>
 #include <parallelngs.hpp>
+#include <sys/stat.h>
 
 
 namespace ngsolve
@@ -2040,6 +2041,14 @@ namespace ngsolve
   {
     filename = pde.GetDirectory()+dirslash+flags.GetStringFlag("filename","");
     ascii = flags.GetDefineFlag("ascii");
+
+    struct stat buffer;
+    if (stat (filename.c_str(), &buffer) < 0) {
+      std::ostringstream oss;
+      // TODO output errno
+      oss << "can't load solution because " << filename << " does not exist";
+      throw Exception(oss.str());
+    }
   }
 
   void NumProcLoadSolution :: Do(LocalHeap & lh)
